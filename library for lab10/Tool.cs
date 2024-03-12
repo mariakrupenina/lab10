@@ -1,19 +1,20 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static library_for_lab10.Tool;
 
 namespace library_for_lab10
 {
     //Инструмент
     public class Tool: IInit, IComparable, ICloneable
     {
-        protected Random rnd = new Random();
+        static public Random rnd = new Random();
         protected string name;
         public IdNumber id;
-        static string[] Names = { "дрель", "пассатижи", "шуруповёрт", "ключ", "напильник", "паяльник", "угольник", "уровень", "рулетка", "рубанок" };
+        static public string[] Names = { "дрель", "пассатижи", "шуруповёрт", "ключ", "напильник", "паяльник", "угольник", "уровень", "рулетка", "рубанок" };
 
         public string Name //название
         {
@@ -81,11 +82,11 @@ namespace library_for_lab10
 
         public virtual void VirtualPrint()
         {
-            Console.WriteLine($"Intrumental: Название = {Name}");
+            Console.WriteLine($"Tool: Название = {Name}");
         }
         public void Print()
         {
-            Console.WriteLine($"Intrumental: Названине = {Name}");
+            Console.WriteLine($"Tool: Названине = {Name}");
         }
 
         //Реализация сортировки по имени
@@ -101,72 +102,59 @@ namespace library_for_lab10
             return new Tool(Name, id.id);
         }
 
-        public object ShallowCopy()
+        public object ShallowCopy() //поверхностное копирование
         {
             return this.MemberwiseClone();
         }
+    }
+        
+    //ЧАСТЬ 3
+    public class IdNumber 
+    {
+        public int id;
 
-
-        //ЧАСТЬ 3
-        public class IdNumber
+        public IdNumber(int id)
         {
-            public int id;
-
-            public IdNumber(int num)
+            if (id > 0)
             {
-                if (num > 0)
-                {
-                    id = num;
-                }
-                else
-                {
-                    throw new ArgumentOutOfRangeException("Айди меньше 1");
-                }
+                this.id = id;
             }
-
-            public int Id
+            else
             {
-                get => id;
-                set
-                {
-                    if (value < 0)
-                        id = 1;
-                    else
-                        id = value;
-                }
+                throw new ArgumentOutOfRangeException("Айди меньше 1");
             }
+        }
 
-            public override string ToString()
-            {
-                return id.ToString();
-            }
+        public override string ToString()
+        {
+            return id.ToString();
+        }
 
-            public override bool Equals(object obj)
-            {
-                if (obj is IdNumber n)
-                    return this.id == n.id;
-                else
-                    return false;
-            }
+        public override bool Equals(object obj)
+        {
+            if (obj is IdNumber)
+                return base.Equals(obj);
+            else
+                return false;
+        }
 
-            //Соритровка по id
-            public int Compare(object obj1, object obj2)
-            {
-                if (obj1 == null || obj2 == null) return 0;
+        //Соритровка по id
+        public int Compare(object obj1, object obj2)
+        {
+            if (obj1 == null || obj2 == null) return 0;
 
-                IdNumber i1 = (IdNumber)obj1;
-                IdNumber i2 = (IdNumber)obj2;
+            IdNumber i1 = (IdNumber)obj1;
+            IdNumber i2 = (IdNumber)obj2;
 
-                if (i1.Id != i2.Id) return -1;
-                if (i1.Id == i2.Id) return 0;
-                else
-                    return 1;
-            }
+            if (i1.id != i2.id) return -1;
+            if (i1.id == i2.id) return 0;
+            else
+                return 1;
+        }
 
-            public static implicit operator IdNumber(int v)
-            {
-                throw new NotImplementedException();
-            }
+        public static implicit operator IdNumber(int v)
+        {
+            throw new NotImplementedException();
         }
     }
 }
