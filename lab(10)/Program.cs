@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Threading;
 using library_for_lab10;
 using Library_for_9_lab;
+using static library_for_lab10.Tool;
 
 
 namespace lab_10_
@@ -29,8 +30,15 @@ namespace lab_10_
             Console.WriteLine("                              ЧАСТЬ 1");
             //Формирование массива
             Tool[] array = new Tool[20];
+            for (int i = 0; i < 5; i++)
+            {
+                Tool t1 = new Tool();
+                t1.RandomInit();
+                array[i] = t1;
 
-            for (int i = 0; i < 10; i++)
+            }
+
+            for (int i = 5; i < 10; i++)
             {
                 HandTool h = new HandTool();
                 h.RandomInit();
@@ -71,9 +79,9 @@ namespace lab_10_
             double ArangeSum;
             foreach (Tool item in array)
             {
-                if (item is MeasuringTool t)
+                if (item is MeasuringTool tool)
                 {
-                    sum += t.GetAccuracy();
+                    sum += tool.GetAccuracy();
                     count++;
                 }
             }
@@ -153,7 +161,7 @@ namespace lab_10_
             Console.WriteLine($"Количество клеток на шахматной доске:{countCells} \n");
 
 
-            Console.WriteLine("Сортировка1 'по имени':");
+            Console.WriteLine("Сортировка 'по имени':");
             Array.Sort(array);
             foreach (Tool item in array)
             { Console.WriteLine(item); }
@@ -173,27 +181,28 @@ namespace lab_10_
                 Console.WriteLine("НЕ НАЙДЕН");
             else
                 Console.WriteLine($"элемент {SearchTool} на {position + 1} месте");
+            Console.WriteLine();
 
 
-            Console.WriteLine("Сорировка2 'по номеру':");
-            Array.Sort(array, new IdNumber());
-            foreach (Tool item in array) { Console.WriteLine(item); }
 
+            Tool t = new Tool();
+            t.RandomInit();
+            Console.WriteLine(t);
+            Tool copy = (Tool)t.ShallowCopy(); //поверхностное копирование
+            Console.WriteLine( $"Shalllow copy {copy}");
+            Tool clon = (Tool)t.Clone() ; //глубокое
+            Console.WriteLine($"Clone {clon}");
 
-            Tool a = new Tool();
-            a.RandomInit();
-            Console.WriteLine(a);
-            Tool copy = (Tool)a.ShallowCopy(); //поверхностное копирование
-            Console.WriteLine(copy);
-            Tool clon = (Tool)a.Clone();
-            Console.WriteLine(clon);
+            Console.WriteLine();
+            Console.WriteLine();
 
             Console.WriteLine("После изменений:");
-            copy.Name = "COPY" + "" + a.Name;
-            copy.id.id = 100;
-            clon.Name = "CLON" + "" + a.Name;
-            clon.id.id = 200;
-            Console.WriteLine(a);
+            copy.Name = "КОПИЯ: " + "" + t.Name;
+            t.id.id = 100; //меняем значения у оригинала, следовательно она меняется у копии
+            clon.Name = "КЛОН: " + "" + t.Name;
+            clon.id.id = 200; //независимый от оригинаоа
+
+            Console.WriteLine(t);
             Console.WriteLine(copy);
             Console.WriteLine(clon);
         }
